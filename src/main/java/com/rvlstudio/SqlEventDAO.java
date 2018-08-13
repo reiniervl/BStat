@@ -8,6 +8,7 @@ import java.util.HashSet;
 
 public class SqlEventDAO implements EventDAO {
 	private static final String conStr = "jdbc:sqlite:events.db";
+	private static SqlEventDAO dao = null;
 
 	private static Connection getConnection() {
 		Connection con = null;
@@ -19,7 +20,12 @@ public class SqlEventDAO implements EventDAO {
 		return con;
 	}
 
-	public SqlEventDAO() {
+	public static SqlEventDAO getDAO() {
+		if(dao == null) dao = new SqlEventDAO();
+		return dao;
+	}
+
+	private SqlEventDAO() {
 		try(Connection con = getConnection()) {
 			con.createStatement().execute("CREATE TABLE IF NOT EXISTS events(id INTEGER PRIMARY KEY AUTOINCREMENT, description VARCHAR, value VARCHAR, calendar INTEGER, unit VARCHAR, uuid VARCHAR)");
 		} catch(SQLException e) {
