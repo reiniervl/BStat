@@ -1,7 +1,7 @@
-/home/reinier/Projects/java/BStat/src/main/java/com/rvlstudio/Unit.java
-/home/reinier/Projects/java/BStat/src/main/java/com/rvlstudio/Event.java
-/home/reinier/Projects/java/BStat/src/main/java/com/rvlstudio/ListEventManager.java
-/home/reinier/Projects/java/BStat/src/main/java/com/rvlstudio/EventManager.java
-/home/reinier/Projects/java/BStat/src/main/java/com/rvlstudio/UnknownIdException.java
-/home/reinier/Projects/java/BStat/src/main/java/com/rvlstudio/BStat.java
-/home/reinier/Projects/java/BStat/src/main/java/com/rvlstudio/SqlEventManager.java
+H:\Projects\Java\BStat\src\main\java\com\rvlstudio\BStat.java
+H:\Projects\Java\BStat\src\main\java\com\rvlstudio\Event.java
+H:\Projects\Java\BStat\src\main\java\com\rvlstudio\SqlEventDAO.java
+H:\Projects\Java\BStat\src\main\java\com\rvlstudio\EventDAO.java
+H:\Projects\Java\BStat\src\main\java\com\rvlstudio\ListEventDAO.java
+H:\Projects\Java\BStat\src\main\java\com\rvlstudio\UnknownIdException.java
+H:\Projects\Java\BStat\src\main\java\com\rvlstudio\Unit.java

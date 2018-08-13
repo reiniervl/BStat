@@ -1,6 +1,4 @@
-com/rvlstudio/ListEventManager.class
-com/rvlstudio/EventManager.class
-com/rvlstudio/Unit.class
-com/rvlstudio/BStat.class
-com/rvlstudio/UnknownIdException.class
-com/rvlstudio/Event.class
+com\rvlstudio\UnknownIdException.class
+com\rvlstudio\BStat.class
+com\rvlstudio\Unit.class
+com\rvlstudio\Event.class

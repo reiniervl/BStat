@@ -31,9 +31,9 @@ public class AppTest extends TestCase {
      */
     public void testApp() {
         EventDAO em = new SqlEventDAO();
-        em.addEvent(new Event<Integer>(740, "Drinken", Calendar.getInstance(), Unit.MILILITER));
-        em.addEvent(new Event<Integer>(840, "Drinken", Calendar.getInstance(), Unit.MILILITER));
-        em.addEvent(new Event<Double>(1.4, "Slurpen", Calendar.getInstance(), Unit.LITER));
+        em.addEvent(new Event<Integer>(100, "Melk", Calendar.getInstance(), Unit.MILILITER));
+        em.addEvent(new Event<Integer>(150, "Melk", Calendar.getInstance(), Unit.MILILITER));
+        em.addEvent(new Event<Double>(0.04, "Water", Calendar.getInstance(), Unit.LITER));
 
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();

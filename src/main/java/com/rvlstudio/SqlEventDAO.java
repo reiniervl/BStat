@@ -27,21 +27,23 @@ public class SqlEventDAO implements EventDAO {
 		}
 	}
 
+	private Event<?> eventFromRow(ResultSet rs) throws SQLException {
+		Unit unit = Unit.fromString(rs.getString("unit"));
+		String description = rs.getString("description");
+		UUID uuid = UUID.fromString(rs.getString("UUID"));
+		String value = rs.getString("value");
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(rs.getLong("calendar"));
+		if(unit.equals(Unit.MILILITER) || unit.equals(Unit.GRAM)) return new Event<Integer>(Integer.parseInt(value), description, cal, unit, uuid);
+		else if(unit.equals(Unit.LITER) || unit.equals(Unit.KILO)) return new Event<Double>(Double.parseDouble(value), description, cal, unit, uuid);
+		else return new Event<String>(value, description, cal, unit, uuid);
+	}
+
 	@Override
 	public Event<?> getEvent(UUID id) throws UnknownIdException {
 		try(Connection con = getConnection()) {
 			ResultSet rs = con.createStatement().executeQuery("SELECT * FROM events WHERE uuid=" + id.toString());
-			if(rs.next()) {
-				Unit unit = Unit.fromString(rs.getString("unit"));
-				String description = rs.getString("description");
-				UUID uuid = UUID.fromString(rs.getString("UUID"));
-				String value = rs.getString("value");
-				Calendar cal = Calendar.getInstance();
-				cal.setTimeInMillis(rs.getLong("calendar"));
-				if(unit.equals(Unit.MILILITER) || unit.equals(Unit.GRAM)) return new Event<Integer>(Integer.parseInt(value), description, cal, unit, uuid);
-				else if(unit.equals(Unit.LITER) || unit.equals(Unit.KILO)) return new Event<Double>(Double.parseDouble(value), description, cal, unit, uuid);
-			}
-
+			if(rs.next()) {	return eventFromRow(rs); }
 			throw new UnknownIdException("id not found " + id);
 		} catch(SQLException e) {
 			System.out.println("Error retreiving event: " + e.getMessage());
@@ -60,16 +62,7 @@ public class SqlEventDAO implements EventDAO {
 				stmt.setLong(1, s);
 				stmt.setLong(2, e);
 				ResultSet rs = stmt.executeQuery();
-				while(rs.next()) {
-					Unit unit = Unit.fromString(rs.getString("unit"));
-					String description = rs.getString("description");
-					UUID uuid = UUID.fromString(rs.getString("UUID"));
-					String value = rs.getString("value");
-					Calendar cal = Calendar.getInstance();
-					cal.setTimeInMillis(rs.getLong("calendar"));
-					if(unit.equals(Unit.MILILITER) || unit.equals(Unit.GRAM)) set.add(new Event<Integer>(Integer.parseInt(value), description, cal, unit, uuid));
-					else if(unit.equals(Unit.LITER) || unit.equals(Unit.KILO)) set.add(new Event<Double>(Double.parseDouble(value), description, cal, unit, uuid));
-				}
+				while(rs.next()) { set.add(eventFromRow(rs));	}
 		} catch(SQLException exc) {
 			System.out.println("Error retreiving all events: " + exc.getMessage());
 		}
@@ -83,16 +76,7 @@ public class SqlEventDAO implements EventDAO {
 			PreparedStatement stmt = con.prepareStatement("select * from events where description=?")) {
 				stmt.setString(1, description);
 				ResultSet rs = stmt.executeQuery();
-				while(rs.next()) {
-					Unit unit = Unit.fromString(rs.getString("unit"));
-					String desc = rs.getString("description");
-					UUID uuid = UUID.fromString(rs.getString("UUID"));
-					String value = rs.getString("value");
-					Calendar cal = Calendar.getInstance();
-					cal.setTimeInMillis(rs.getLong("calendar"));
-					if(unit.equals(Unit.MILILITER) || unit.equals(Unit.GRAM)) set.add(new Event<Integer>(Integer.parseInt(value), desc, cal, unit, uuid));
-					else if(unit.equals(Unit.LITER) || unit.equals(Unit.KILO)) set.add(new Event<Double>(Double.parseDouble(value), desc, cal, unit, uuid));
-				}
+				while(rs.next()) { set.add(eventFromRow(rs)); }
 		} catch(SQLException exc) {
 			System.out.println("Error retreiving all events: " + exc.getMessage());
 		}
@@ -104,16 +88,7 @@ public class SqlEventDAO implements EventDAO {
 		try(Connection con = getConnection();
 			PreparedStatement stmt = con.prepareStatement("select * from events")) {
 				ResultSet rs = stmt.executeQuery();
-				while(rs.next()) {
-					Unit unit = Unit.fromString(rs.getString("unit"));
-					String desc = rs.getString("description");
-					UUID uuid = UUID.fromString(rs.getString("UUID"));
-					String value = rs.getString("value");
-					Calendar cal = Calendar.getInstance();
-					cal.setTimeInMillis(rs.getLong("calendar"));
-					if(unit.equals(Unit.MILILITER) || unit.equals(Unit.GRAM)) set.add(new Event<Integer>(Integer.parseInt(value), desc, cal, unit, uuid));
-					else if(unit.equals(Unit.LITER) || unit.equals(Unit.KILO)) set.add(new Event<Double>(Double.parseDouble(value), desc, cal, unit, uuid));
-				}
+				while(rs.next()) { set.add(eventFromRow(rs)); }
 		} catch(SQLException exc) {
 			System.out.println("Error retreiving all events: " + exc.getMessage());
 		}
