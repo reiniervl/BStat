@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.HashSet;
 
 public class SqlEventDAO implements EventDAO {
-	private static final String conStr = "jdbc:sqlite:events.db";
+	private static String conStr = "jdbc:sqlite:events.db";
 	private static SqlEventDAO dao = null;
 
 	private static Connection getConnection() {
@@ -23,6 +23,11 @@ public class SqlEventDAO implements EventDAO {
 	public static SqlEventDAO getDAO() {
 		if(dao == null) dao = new SqlEventDAO();
 		return dao;
+	}
+
+	public static SqlEventDAO getDAO(String path) {
+		conStr = "jdbc:sqlite:" + path;
+		return getDAO();
 	}
 
 	private SqlEventDAO() {
@@ -145,5 +150,4 @@ public class SqlEventDAO implements EventDAO {
 			System.out.println("Error deleting event " + e.getMessage());
 		}
 	}
-
 }

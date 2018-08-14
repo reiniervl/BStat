@@ -30,7 +30,7 @@ public class AppTest extends TestCase {
      * Rigourous Test :-)
      */
     public void testApp() {
-        EventDAO em = new SqlEventDAO();
+        EventDAO em = SqlEventDAO.getDAO();
         em.addEvent(new Event<Integer>(100, "Melk", Calendar.getInstance(), Unit.MILILITER));
         em.addEvent(new Event<Integer>(150, "Melk", Calendar.getInstance(), Unit.MILILITER));
         em.addEvent(new Event<Double>(0.04, "Water", Calendar.getInstance(), Unit.LITER));
@@ -39,7 +39,6 @@ public class AppTest extends TestCase {
         Calendar end = Calendar.getInstance();
         start.add(Calendar.MONTH, -1);
         end.add(Calendar.MONTH, 1);
-        System.out.format("Start: %s\nEnd: %s\n", start.getTime().toString(), end.getTime().toString());
 
         for(Event<?> e : em.getEvents(start, end)) {
             System.out.println(e);
