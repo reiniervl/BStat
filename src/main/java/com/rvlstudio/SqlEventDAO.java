@@ -12,11 +12,8 @@ public class SqlEventDAO implements EventDAO {
 
 	private static Connection getConnection() {
 		Connection con = null;
-		try {
-			con = DriverManager.getConnection(conStr);
-		} catch(SQLException e) {
-			System.out.println(e);
-		}
+		try { con = DriverManager.getConnection(conStr); } 
+		catch(SQLException e) { System.out.println(e); }
 		return con;
 	}
 
@@ -32,7 +29,7 @@ public class SqlEventDAO implements EventDAO {
 
 	private SqlEventDAO() {
 		try(Connection con = getConnection()) {
-			con.createStatement().execute("CREATE TABLE IF NOT EXISTS events(id INTEGER PRIMARY KEY AUTOINCREMENT, description VARCHAR, value VARCHAR, calendar INTEGER, unit VARCHAR, uuid VARCHAR)");
+			con.createStatement().execute("CREATE TABLE IF NOT EXISTS events(uuid VARCHAR PRIMARY KEY, description VARCHAR, value VARCHAR, calendar INTEGER, unit VARCHAR)");
 		} catch(SQLException e) {
 			System.out.println("Error database init: " + e.getMessage());
 		}
@@ -41,7 +38,7 @@ public class SqlEventDAO implements EventDAO {
 	private Event<?> eventFromRow(ResultSet rs) throws SQLException {
 		Unit unit = Unit.fromString(rs.getString("unit"));
 		String description = rs.getString("description");
-		UUID uuid = UUID.fromString(rs.getString("UUID"));
+		UUID uuid = UUID.fromString(rs.getString("uuid"));
 		String value = rs.getString("value");
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(rs.getLong("calendar"));
@@ -143,7 +140,7 @@ public class SqlEventDAO implements EventDAO {
 
 	@Override
 	public void deleteEvent(Event<?> event) {
-		try(Connection con = getConnection(); PreparedStatement stmnt = con.prepareStatement("DELETE FROM events WHERE uuid = ?")) {
+		try(Connection con = getConnection(); PreparedStatement stmnt = con.prepareStatement("DELETE FROM events WHERE uuid=?")) {
 			stmnt.setString(1, event.getId().toString());
 			stmnt.execute();
 		} catch(SQLException e) {
