@@ -22,7 +22,9 @@ public class SqlEventDAO implements EventDAO {
 		return dao;
 	}
 
+	
 	public static SqlEventDAO getDAO(String path) {
+		if(dao != null) throw new RuntimeException("DAO already exists at path: " + conStr);
 		conStr = "jdbc:sqlite:" + path;
 		return getDAO();
 	}
@@ -66,7 +68,7 @@ public class SqlEventDAO implements EventDAO {
 		
 		HashSet<Event<?>> set = new HashSet<>();
 		try(Connection con = getConnection();
-			PreparedStatement stmt = con.prepareStatement("select * from events where calendar > ? and calendar < ?")) {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM events WHERE calendar > ? AND calendar < ?")) {
 				stmt.setLong(1, s);
 				stmt.setLong(2, e);
 				ResultSet rs = stmt.executeQuery();
@@ -81,7 +83,7 @@ public class SqlEventDAO implements EventDAO {
 	public Set<Event<?>> getEvents(String description) {
 		HashSet<Event<?>> set = new HashSet<>();
 		try(Connection con = getConnection();
-			PreparedStatement stmt = con.prepareStatement("select * from events where description=?")) {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM events WHERE where description=?")) {
 				stmt.setString(1, description);
 				ResultSet rs = stmt.executeQuery();
 				while(rs.next()) { set.add(eventFromRow(rs)); }
@@ -94,7 +96,7 @@ public class SqlEventDAO implements EventDAO {
 	public Set<Event<?>> getEvents() {
 		HashSet<Event<?>> set = new HashSet<>();
 		try(Connection con = getConnection();
-			PreparedStatement stmt = con.prepareStatement("select * from events")) {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM events")) {
 				ResultSet rs = stmt.executeQuery();
 				while(rs.next()) { set.add(eventFromRow(rs)); }
 		} catch(SQLException exc) {
@@ -107,8 +109,7 @@ public class SqlEventDAO implements EventDAO {
 	public void addEvent(Event<?> event) {
 		try(Connection con = getConnection(); 
 			PreparedStatement stmt = con.prepareStatement(
-				"INSERT INTO events(description, value, calendar, unit, uuid) VALUES(?,?,?,?,?)")) 
-				{
+				"INSERT INTO events(description, value, calendar, unit, uuid) VALUES(?,?,?,?,?)")) {
 					stmt.setString(1, event.getDescription());
 					stmt.setString(2, event.getValue().toString());
 					stmt.setLong(3, event.getCalendar().getTimeInMillis());
@@ -124,8 +125,7 @@ public class SqlEventDAO implements EventDAO {
 	public void updateEvent(Event<?> event) {
 		try(Connection con = getConnection(); 
 			PreparedStatement stmt = con.prepareStatement(
-				"UPDATE events SET description=?, value=?, calendar=?, unit=? WHERE uuid=?")) 
-				{
+				"UPDATE events SET description=?, value=?, calendar=?, unit=? WHERE uuid=?")) {
 					stmt.setString(1, event.getDescription());
 					stmt.setString(2, event.getValue().toString());
 					stmt.setLong(3, event.getCalendar().getTimeInMillis());
