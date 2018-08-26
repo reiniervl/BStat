@@ -44,6 +44,6 @@ public class Event<T> {
 
 	@Override
 	public String toString() {
-		return description + " value: " + value + "\tat: " + calendar.getTime().toString();
+		return String.format("uuid: %s\tdescription: %s\tvalue: %s\tcalendar: %s\tunit: %s", id.toString(), description, value.toString(), calendar.getTime().toString(), unit.toString());
 	}
 }
