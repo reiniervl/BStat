@@ -47,6 +47,9 @@ public class AppTest extends TestCase {
          */
 
          EventDAO dao = new RestEventDAO(ResourceBundle.getBundle("com.rvlstudio.test"));
+         dao.addEvent(new Event<Integer>(100, "Melk", Calendar.getInstance(), Unit.MILILITER));
+         //dao.addEvent(new Event<Integer>(150, "Melk", Calendar.getInstance(), Unit.MILILITER));
+         //dao.addEvent(new Event<Double>(0.04, "Water", Calendar.getInstance(), Unit.LITER));
         
          Calendar start = Calendar.getInstance();
          Calendar end = Calendar.getInstance();

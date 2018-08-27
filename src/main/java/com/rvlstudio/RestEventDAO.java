@@ -181,6 +181,7 @@ public class RestEventDAO implements EventDAO {
 
 	@Override
 	public void addEvent(Event<?> event) {
+        StringBuilder response = new StringBuilder();
         try {
             StringBuilder params = new StringBuilder();
             params.append("action=");
@@ -207,16 +208,23 @@ public class RestEventDAO implements EventDAO {
             con.addRequestProperty("Content-Length", String.valueOf(encodedParams.length));
 
             con.setDoOutput(true);
-            con.getOutputStream().write(encodedParams);
-            try {
-                JSONObject jsonObject = new JSONObject(new JSONTokener(con.getInputStream()));
-                String response = jsonObject.getString("success");
-                if(response.equals("true")) System.out.println("Addition successful");
-            } catch(JSONException e) {
-                System.out.println("Error ADD response: " + e.getMessage());
-            }
+			con.getOutputStream().write(encodedParams);
+			
+			BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String line;
+			while((line = reader.readLine()) != null) response.append(line);
+
+			JSONObject jsonObject = new JSONObject(new JSONTokener(response.toString()));
+			String res = jsonObject.getString("success");
+			if(res.equals("true")) System.out.println("Addition successful");
+		} catch(JSONException e) {
+			System.out.println("Error ADD response: " + e.getMessage());
+			System.out.println(response);
         } catch(IOException e) {
-            System.out.format("Error establishing connection -> %s", e.getMessage());
+            System.out.format("Error establishing connection: %s\n", e.getMessage());
+            for(StackTraceElement el : e.getStackTrace()) {
+                System.out.println(el);
+            }
         }
 	}
 
