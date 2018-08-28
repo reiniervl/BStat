@@ -1,2 +1,4 @@
+BStat.code-workspace
+src/test/java/com/rvlstudio/test.properties
 events.db
 target/
