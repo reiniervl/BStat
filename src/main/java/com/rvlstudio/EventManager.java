@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class EventManager extends Observable {
 	private ArrayList<Event<?>> events;
 
-	private static SqlEventDAO dao = null;
+	private static EventDAO dao = null;
 	
 	public EventManager() {
 		EventManager.dao = SqlEventDAO.getDAO();

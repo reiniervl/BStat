@@ -30,6 +30,7 @@ public class AppTest extends TestCase {
      * Rigourous Test :-)
      */
     public void testApp() {
+        /* 
         EventDAO em = SqlEventDAO.getDAO();
         em.addEvent(new Event<Integer>(100, "Melk", Calendar.getInstance(), Unit.MILILITER));
         em.addEvent(new Event<Integer>(150, "Melk", Calendar.getInstance(), Unit.MILILITER));
@@ -43,6 +44,23 @@ public class AppTest extends TestCase {
         for(Event<?> e : em.getEvents(start, end)) {
             System.out.println(e);
         }
+         */
+
+         EventDAO dao = new RestEventDAO(ResourceBundle.getBundle("com.rvlstudio.test"));
+         dao.addEvent(new Event<Integer>(100, "Melk", Calendar.getInstance(), Unit.MILILITER));
+         dao.addEvent(new Event<Integer>(150, "Melk", Calendar.getInstance(), Unit.MILILITER));
+         dao.addEvent(new Event<Double>(0.04, "Water", Calendar.getInstance(), Unit.LITER));
+        
+         Calendar start = Calendar.getInstance();
+         Calendar end = Calendar.getInstance();
+         start.add(Calendar.MONTH, -1);
+         end.add(Calendar.MONTH, 1);
+        
+        
+         for(Event<?> e : dao.getEvents(start, end)) {
+             System.out.println(e);
+         }
+        
         assertTrue( true );
     }
 }

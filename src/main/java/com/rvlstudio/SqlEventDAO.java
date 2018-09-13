@@ -142,7 +142,7 @@ public class SqlEventDAO implements EventDAO {
 	public void deleteEvent(Event<?> event) {
 		try(Connection con = getConnection(); PreparedStatement stmnt = con.prepareStatement("DELETE FROM events WHERE uuid=?")) {
 			stmnt.setString(1, event.getId().toString());
-			stmnt.execute();
+			stmnt.executeUpdate();
 		} catch(SQLException e) {
 			System.out.println("Error deleting event " + e.getMessage());
 		}
