@@ -20,8 +20,8 @@ import org.json.*;
 
 public class RestEventDAO implements EventDAO {
     private URL url = null;
-    private String user = "nayla";
-    private String password = "2017";
+    private String user = "";
+    private String password = "";
 
     private Set<Event<?>> parseJSONArray(JSONArray array) {
         Set<Event<?>> set = new HashSet<>();
